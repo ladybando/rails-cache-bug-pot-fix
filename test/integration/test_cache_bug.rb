@@ -1,5 +1,5 @@
 require 'test_helper'
-
+require 'pry'
 # This test, calling user.id, passes
 class CacheBugTest < ActionDispatch::IntegrationTest
   test "cached entries should not change part a" do
@@ -17,11 +17,14 @@ end
 
 # This test, calling user.avatar, fails
 class CacheBugTest < ActionDispatch::IntegrationTest
+
   test "cached entries should not change part b" do
     f = Rails.cache.fetch("key2") do
       users = User.first(5)
+      users[0].avatar
       [users, 0]
     end
+    binding.pry
 
     r = Rails.cache.read("key2")
 
